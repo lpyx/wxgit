@@ -1,3 +1,30 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.3.21'
+        springBootVersion = '2.0.4.RELEASE'
+        pagerHelper = '1.2.3'
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            credentials {
+                username 'viewer'
+                password 'rd3MKY&8[WWcG'
+            }
+            url "http://nexus.blacklake.tech/repository/maven-public/"
+        }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+       // classpath("tech.blacklake.dev:gen-retrofit-plugin:0.0.1-SNAPSHOT")
+    }
+}
+
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.3.41'
@@ -9,12 +36,43 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+    mavenLocal()
+    maven {
+        credentials {
+            username 'viewer'
+            password 'rd3MKY&8[WWcG'
+        }
+        url "http://nexus.blacklake.tech/repository/maven-public/"
+    }
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile('com.google.guava:guava:20.0')
+    compile group: 'org.codehaus.groovy', name: 'groovy-jsr223', version: '2.5.8'
+    compile group: 'org.apache.hbase', name: 'hbase-client', version: '2.2.1'
+
+
+    compile("com.github.pagehelper:pagehelper-spring-boot-starter:${pagerHelper}")
+
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7")
+
+    compile('io.springfox:springfox-swagger-ui:2.7.0')
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    testCompile("org.jetbrains.kotlin:kotlin-test:${kotlinVersion}")
+    testCompile("org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}")
+
+    compile("org.jetbrains.kotlin:kotlin-compiler:${kotlinVersion}")
+    compile("org.jetbrains.kotlin:kotlin-scripting-jvm:${kotlinVersion}")
+
+    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+
+    compile("org.jetbrains.kotlin:kotlin-script-util:${kotlinVersion}")
+    compile group: 'org.apache.poi', name: 'poi', version: '4.1.1'
+
 }
 
 compileKotlin {
