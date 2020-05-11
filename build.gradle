@@ -6,13 +6,6 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven {
-            credentials {
-                username 'viewer'
-                password 'rd3MKY&8[WWcG'
-            }
-            url "http://nexus.blacklake.tech/repository/maven-public/"
-        }
         maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
 
     }
@@ -21,7 +14,6 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
-       // classpath("tech.blacklake.dev:gen-retrofit-plugin:0.0.1-SNAPSHOT")
     }
 }
 
@@ -37,13 +29,6 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenLocal()
-    maven {
-        credentials {
-            username 'viewer'
-            password 'rd3MKY&8[WWcG'
-        }
-        url "http://nexus.blacklake.tech/repository/maven-public/"
-    }
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
 }
 
@@ -72,6 +57,8 @@ dependencies {
 
     compile("org.jetbrains.kotlin:kotlin-script-util:${kotlinVersion}")
     compile group: 'org.apache.poi', name: 'poi', version: '4.1.1'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.1'
+
 
 }
 
@@ -80,4 +67,13 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'FoyPyx'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
