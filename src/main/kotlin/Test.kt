@@ -8,13 +8,15 @@ fun foo(){
     println("end")
 }
 fun main(args:Array<String>){
+    val a= "aaa"
+    println("'${a}'")
 
-    val base = Base();
-    base.s()
-
-    (C1() as Base).s()
-
-    (C2() as Base).s()
+//    val base = Base();
+//    base.s()
+//
+//    (C1() as Base).s()
+//
+//    (C2() as Base).s()
 }
 
 class Person constructor(a:Int){

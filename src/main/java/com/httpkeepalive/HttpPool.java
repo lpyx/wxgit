@@ -5,6 +5,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.ProtocolVersion;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -24,32 +25,18 @@ public class HttpPool {
 
     public static void main(String[] args) {
         try {
-            for (int i = 0; i < 10; i++) {
+            sendGet("https://baidu.com");
 
-                System.out.println("i");
-                //sendGet("https://api2.blacklake.cn/info");
-                //Thread.sleep(5000);
-                sendGet("https://api2-test.blacklake.cn/manufacture/v1/reproduce_tasks?page=1&size=20&status=1,2");
-                //sendGet("https://api2.blacklake.cn/info");
-                //sendGet("https://api2.blacklake.cn/ab_shipment/v1/receive_task/_list_for_app?searchStep=0,1,2,3,4,5,6,7,9,10,11,15&page=1");
-                //sendGet("https://api2-test.blacklake.cn/ab_shipment/v1/receive_task/_list_for_app?k=test");
-               // sendGet("http://10.1.30.7:8080/cat/r/home?op=view&docName=index");
-                //sendGet("http://cat.blacklake.tech/cat/r/home?op=view&docName=index");
-                //sendGet("https://qyapi.weixin.qq.com");
-
-                Thread.sleep(20000000);
-            }
-
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
 
         } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                httpClient.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
@@ -80,7 +67,8 @@ public class HttpPool {
 
             };
             //设置 evictExpiredConnections 后，每隔10s清理过期链接
-             httpClient = HttpClients.custom().setConnectionManager(cm).setKeepAliveStrategy(kaStrategy).evictExpiredConnections().build();
+            httpClient = HttpClients.createDefault();
+            // httpClient = HttpClients.custom().setConnectionManager(cm).setKeepAliveStrategy(kaStrategy).evictExpiredConnections().build();
             //httpClient = HttpClients.custom().setConnectionManager(cm).build();
         }
 
@@ -108,6 +96,7 @@ public class HttpPool {
         httpGet.setHeader(":authority", "api2-test.blacklake.cn");
         httpGet.setHeader("user-agent", "okhttp/3.10.0");
         httpGet.setHeader("accept-encoding", "gzip");
+        httpGet.setHeader("origin", "https://web2-test.blacklake.cn");
         httpGet.setHeader("X-AUTH", "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjE2LCJzc29Ub2tlbiI6Iml2Mk9tT0s3Q01kVjR6Vm0ifQ.shg1NAlxlbaN7W6OKr8gfmnbal3V_Xo7wMkzDa1wtCjpdR07dD0FMZtihCTN6aKHGLMgKZiaYSiJFtACNInDqQ");
         // httpGet.setHeader("","timeout:5");
         RequestConfig requestConfig = RequestConfig.custom()

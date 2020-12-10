@@ -1,5 +1,6 @@
 package com.excel;
 
+import com.google.gson.Gson;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -21,11 +22,19 @@ public class TestEx {
 
     }
 
-    public static void main(String[] args) {
+    public static int controlIdCellNum = 1;
+    public static int standardCellNum = 2;
+    public static String sheetName = "1";
+    public static Long ORG_ID = 404L;
+    static String fileName = "/Users/handty/Desktop/haining2.xlsx";
+    static String outputFileName = "/Users/handty/Desktop/0929_output404.sql";
+    static String errorFileName = "/Users/handty/Desktop/error_0929_output404.txt";
 
-        String fileName = "/Users/handty/Desktop/0507.xlsx";
-        String outputFileName = "/Users/handty/Desktop/0507_output408.sql";
-        List<String> result = readDaoxiao(new File(fileName));
+
+    static Gson gson  =new Gson();
+
+    public static void main(String[] args) {
+        List<String> result = readDaoxiao(new File(fileName),ORG_ID);
         System.out.println(result.size());
         writeToFile(result,outputFileName);
     }
@@ -51,22 +60,39 @@ public class TestEx {
         }
 
     }
-    public static List<String> readDaoxiao(File file) {
+    public static List<String> readDaoxiao(File file,Long orgId) {
         List<String> resultList = new ArrayList();
+        List<String> errorList = new ArrayList();
         try (InputStream inputStream = new FileInputStream(file)) {
 
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             //筛选sheet
-            XSSFSheet sheet = (XSSFSheet) workbook.getSheet("sheet1");
+            XSSFSheet sheet = (XSSFSheet) workbook.getSheet(sheetName);
             int lastRowNum = sheet.getLastRowNum();
             for (int i = 0; i <= lastRowNum; i++) {
                 XSSFRow row = sheet.getRow(i);
 
                 //
-                String controlId = getCellValue(row.getCell(0));
-                String value = getCellValue(row.getCell(1));
+                if(row == null){
+                    continue;
+                }
+                String controlId = getCellValue(row.getCell(controlIdCellNum));
+                String value = getCellValue(row.getCell(standardCellNum));
+                if(value == null || value.trim().length() == 0){
 
-                resultList.add("update sopdef.sop_control set  standard_logic=0,input_standard = CAST(trim('"+value+"') as JSON) where org_id = 408 and id = "+controlId+";");
+                }else {
+                    try{
+                        gson.fromJson(value,Object.class);
+
+                        resultList.add("update sopdef.sop_control set  standard_logic=0,input_standard = CAST(trim('" + value + "') as JSON) where org_id = " + orgId + " and id = " + controlId + ";");
+
+                    }catch (Exception e1){
+                        String errorMsg = controlId+" "+value;
+                        errorList.add(errorMsg);
+                        System.out.println(errorMsg);
+                    }
+
+                }
 
             }
 
@@ -74,6 +100,7 @@ public class TestEx {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        writeToFile(errorList, errorFileName);
         return resultList;
 
     }
