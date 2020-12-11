@@ -26,9 +26,10 @@ public class TestEx {
     public static int standardCellNum = 2;
     public static String sheetName = "1";
     public static Long ORG_ID = 404L;
-    static String fileName = "/Users/handty/Desktop/haining2.xlsx";
-    static String outputFileName = "/Users/handty/Desktop/0929_output404.sql";
-    static String errorFileName = "/Users/handty/Desktop/error_0929_output404.txt";
+    static String directory = "/Users/handty/Desktop/工作文件/亚大/20201211/";
+    static String fileName = directory+"东250-1燃气(1) 1.xlsx";
+    static String outputFileName = directory+"20201211_output353东250-1燃气.sql";
+    static String errorFileName = directory+"error_20201211_output353东250-1燃气.txt";
 
 
     static Gson gson  =new Gson();
